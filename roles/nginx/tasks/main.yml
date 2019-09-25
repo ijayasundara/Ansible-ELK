@@ -1,0 +1,65 @@
+---
+#
+# Installing Nginx
+#
+# Install EPEL Repo
+- name: Check/Install EPEL Repo for nginx
+  yum:
+    name={{ epel_repo }}
+    state=present
+  become: true
+# Install Nginx
+- name: Install nginx
+  yum:
+    name: nginx
+  become: true
+# Deploy kibana.conf with FQDN
+- name: Setup Nginx reverse proxy for kibana
+  template:
+   src=kibana.conf.j2
+   dest=/etc/nginx/nginx.conf
+   owner=root
+   group=root
+   mode=0644
+  register: nginx_needs_restart
+# Enable nginx service
+- name: Enabling Nginx service
+  systemd:
+   name: nginx
+   enabled: yes
+# Start Nginx service
+- name: Starting Nginx service
+  systemd:
+   name: nginx
+   state: started
+   daemon_reload: yes
+# Install Pexpect to handle promts of the terminal
+- name: Copy Pexpect rpm file to the server
+  copy:
+   src: python2-pexpect-4.5-1.el7.noarch.rpm
+   dest: /tmp/python2-pexpect-4.5-1.el7.noarch.rpm
+
+- name: Install package.
+  yum:
+   name: /tmp/python2-pexpect-4.5-1.el7.noarch.rpm
+   state: present
+# Writes the create user script in the temp directory
+- name: Create kibana admin user
+  template:
+   src=kibanaAdmin.j2
+   dest=/tmp/createUser
+   owner=root
+   group=root
+   mode=0744
+# Runs the script to create Kibana admin user
+- name: Create Kibana admin user
+  expect:
+     command: bash /tmp/createUser
+     responses:
+       'Password:' : "{{kibana_password}}"
+# Restart Nginx service
+- name: Restart Nginx service
+  systemd:
+   name: nginx
+   state: reloaded
+   daemon_reload: yes
