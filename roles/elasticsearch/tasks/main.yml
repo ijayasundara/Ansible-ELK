@@ -17,13 +17,6 @@
    name: elasticsearch
    update_cache: yes
   become: true
-# Update Elasticsearch config file to only allow localhost connections
-#- name: Updating the config file to restrict outside access
-#  lineinfile:
-#   destfile: /etc/elasticsearch/elasticsearch.yml
-#   regexp: 'network.host:'
-#   line: 'network.host: localhost'
-# Update Cluster Configurations
 # Writes the create user script in the temp directory
 - name: Updating the cluster configurations
   template:
