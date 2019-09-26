@@ -6,6 +6,7 @@
   remote_user: user
   become: yes
   become_user: root
+  gather_facts: true
   roles:
    - { role: java }
    - { role: elasticsearch }
