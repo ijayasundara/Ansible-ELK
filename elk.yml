@@ -3,7 +3,7 @@
 # Playbook to install the ELK stack
 #
 - hosts: elk
-  remote_user: user
+  remote_user: root
   become: yes
   become_user: root
   gather_facts: true

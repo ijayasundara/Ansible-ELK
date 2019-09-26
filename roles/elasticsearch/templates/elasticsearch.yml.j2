@@ -22,16 +22,16 @@
 cluster.name: {{ elasticsearch_cluster_name }}
 {% endif %}
 #
-# ------------------------------------ Node ------------------------------------
-#
 # Use a descriptive name for the node:
 #
 # Node names are generated dynamically on startup, so you're relieved
 # from configuring them manually. You can tie this node to a specific name:
 #
 # node.name: "es-node-1"
-{% if elasticsearch_node_name is defined %}
-node.name: {{ elasticsearch_node_name }}
+{% if ansible_default_ipv4.address == elasticsearch_master_host %}
+node.name: "es-node-1"
+{% else %}
+node.name: "es-node-2"
 {% endif %}
 #
 # Every node can be configured to allow or deny being eligible as the master,
@@ -40,15 +40,19 @@ node.name: {{ elasticsearch_node_name }}
 # Allow this node to be eligible as a master node (enabled by default):
 #
 # node.master: true
-{% if elasticsearch_node_master_status is defined %}
-node.master: {{ elasticsearch_node_master_status }}
+{% if ansible_default_ipv4.address == elasticsearch_master_host %}
+node.master: true
+{% else %}
+node.master: false
 {% endif %}
 #
 # Allow this node to store data (enabled by default):
 #
 # node.data: true
-{% if elasticsearch_node_data is defined %}
-node.data: {{ elasticsearch_node_data }}
+{% if ansible_default_ipv4.address == elasticsearch_master_host %}
+node.data: false
+{% else %}
+node.data: true
 {% endif %}
 #
 # Add custom attributes to the node:
@@ -85,7 +89,7 @@ path.logs: /var/log/elasticsearch
 #network.host: 172.11.61.27
 #
 {% if elasticsearch_node_host is defined %}
-network.host: {{ elasticsearch_node_host }}
+network.host: {{ ansible_default_ipv4.address }}
 {% endif %}
 #
 # Set a custom port for HTTP:
@@ -101,8 +105,8 @@ http.port: 9200
 #detail the private IPs of your nodes.
 #discovery.zen.ping.unicast.hosts: ["172.11.61.27", "172.31.22.131","172.31.32.221"]
 #
-{% if elasticsearch_node_ips is defined %}
-discovery.zen.ping.unicast.hosts: [{{ elasticsearch_node_ips }}]
+{% if elasticsearch_master_host is defined %}
+discovery.zen.ping.unicast.hosts: ["{{ elasticsearch_master_host }}", "{{ elasticsearch_node_host }}"]
 {% endif %}
 #
 # Prevent the "split brain" by configuring the majority of nodes (total number of master-eligible nodes / 2 + 1):

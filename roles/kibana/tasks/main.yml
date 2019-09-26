@@ -17,11 +17,19 @@
    name: kibana
    update_cache: yes
 # Update kibana config file to only accept local connections
-- name: Updating the config file to restrict outside access
-  lineinfile:
-   destfile: /etc/kibana/kibana.yml
-   regexp: 'server.host:'
-   line: 'server.host: localhost'
+#- name: Updating the config file to restrict outside access
+#  lineinfile:
+#   destfile: /etc/kibana/kibana.yml
+#   regexp: 'server.host:'
+#   line: 'server.host: localhost'
+- name: Updating the kibana configurations
+  template:
+   src=kibana.yml.j2
+   dest=/etc/kibana/kibana.yml
+   owner=root
+   group=kibana
+   mode=0660
+   force=yes
 # Enable Kibana service
 - name: Enabling Kibana service
   systemd:
