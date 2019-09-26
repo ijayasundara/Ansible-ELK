@@ -17,12 +17,6 @@ kibana_password: admin
 nginx_user: www-data
 # Elasticsearch cluster name for cluster configurations
 elasticsearch_cluster_name: elasticsearch
-# Use a descriptive name for the node
-elasticsearch_node_name: es-node-1
-# Allow master node to be eligible as a master node (true by default)
-elasticsearch_node_master_status: true
-# Allow master node to store data (true by default)
-elasticsearch_node_data: true
 # Enter the private IP of your master and node
 elasticsearch_master_host: 192.168.216.86
 elasticsearch_node_host: 192.168.216.80
