@@ -1,0 +1,52 @@
+################################### Cluster ###################################
+
+# Cluster name identifies your cluster for auto-discovery. If you're running
+# multiple clusters on the same network, make sure you're using unique names.
+#
+# cluster.name: elasticsearch
+{% if elasticsearch_cluster_name is defined %}
+cluster.name: {{ elasticsearch_cluster_name }}
+{% endif %}
+
+#################################### Node #####################################
+
+# Node names are generated dynamically on startup, so you're relieved
+# from configuring them manually. You can tie this node to a specific name:
+#
+# node.name: "es-node-1"
+{% if elasticsearch_node_name is defined %}
+node.name: {{ elasticsearch_node_name }}
+{% endif %}
+
+# Every node can be configured to allow or deny being eligible as the master,
+# and to allow or deny to store the data.
+#
+# Allow this node to be eligible as a master node (enabled by default):
+#
+# node.master: true
+{% if elasticsearch_node_master is defined %}
+node.master: {{ elasticsearch_node_master }}
+{% endif %}
+#
+# Allow this node to store data (enabled by default):
+#
+# node.data: true
+{% if elasticsearch_node_data is defined %}
+node.data: {{ elasticsearch_node_data }}
+{% endif %}
+#
+#
+#enter the private IP and port of your node.
+#network.host: 172.11.61.27
+#http.port: 9200
+{% if elasticsearch_network_host is defined %}
+network.host: {{ elasticsearch_network_host }}
+http.port: 9200
+#
+# 
+#detail the private IPs of your nodes.
+# 
+#discovery.zen.ping.unicast.hosts: ["172.11.61.27", "172.31.22.131","172.31.32.221"]
+{% if elasticsearch_node_ips is defined %}
+discovery.zen.ping.unicast.hosts: [{{ elasticsearch_node_ips }}]
+{% endif %}
