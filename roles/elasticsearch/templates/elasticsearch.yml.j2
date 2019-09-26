@@ -40,8 +40,8 @@ node.name: {{ elasticsearch_node_name }}
 # Allow this node to be eligible as a master node (enabled by default):
 #
 # node.master: true
-{% if elasticsearch_node_master is defined %}
-node.master: {{ elasticsearch_node_master }}
+{% if elasticsearch_node_master_status is defined %}
+node.master: {{ elasticsearch_node_master_status }}
 {% endif %}
 #
 # Allow this node to store data (enabled by default):
@@ -84,8 +84,8 @@ path.logs: /var/log/elasticsearch
 #enter the private IP and port of your node.
 #network.host: 172.11.61.27
 #
-{% if elasticsearch_network_host is defined %}
-network.host: {{ elasticsearch_network_host }}
+{% if elasticsearch_node_host is defined %}
+network.host: {{ elasticsearch_node_host }}
 {% endif %}
 #
 # Set a custom port for HTTP:
