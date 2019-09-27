@@ -16,12 +16,7 @@
   yum:
    name: kibana
    update_cache: yes
-# Update kibana config file to only accept local connections
-#- name: Updating the config file to restrict outside access
-#  lineinfile:
-#   destfile: /etc/kibana/kibana.yml
-#   regexp: 'server.host:'
-#   line: 'server.host: localhost'
+# Update kibana config file to accept connections
 - name: Updating the kibana configurations
   template:
    src=kibana.yml.j2
