@@ -1,6 +1,6 @@
 output {
  elasticsearch {
-   hosts => ["localhost:9200"]
+   hosts => ["{{ ansible_default_ipv4.address }}:9200"]
    sniffing => true
    manage_template => false
    index => "%{[@metadata][beat]}-%{+YYYY.MM.dd}"
