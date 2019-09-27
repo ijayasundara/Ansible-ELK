@@ -39,21 +39,21 @@ node.name: "es-node-2"
 #
 # Allow this node to be eligible as a master node (enabled by default):
 #
-# node.master: true
-{% if ansible_default_ipv4.address == elasticsearch_master_host %}
 node.master: true
-{% else %}
-node.master: false
-{% endif %}
+#{% if ansible_default_ipv4.address == elasticsearch_master_host %}
+#node.master: true
+#{% else %}
+#node.master: false
+#{% endif %}
 #
 # Allow this node to store data (enabled by default):
 #
-# node.data: true
-{% if ansible_default_ipv4.address == elasticsearch_master_host %}
-node.data: false
-{% else %}
 node.data: true
-{% endif %}
+#{% if ansible_default_ipv4.address == elasticsearch_master_host %}
+#node.data: false
+#{% else %}
+#node.data: true
+#{% endif %}
 #
 # Add custom attributes to the node:
 #
@@ -96,6 +96,10 @@ network.host: {{ ansible_default_ipv4.address }}
 #
 http.port: 9200
 #
+#Set inital master node
+{% if elasticsearch_master_host is defined %}
+cluster.initial_master_nodes: {{ elasticsearch_master_host }}
+#
 # For more information, consult the network module documentation.
 #
 # --------------------------------- Discovery ----------------------------------
@@ -128,3 +132,5 @@ discovery.zen.ping.unicast.hosts: ["{{ elasticsearch_master_host }}", "{{ elasti
 # Require explicit names when deleting indices:
 #
 #action.destructive_requires_name: true
+xpack.monitoring.enabled: true
+xpack.monitoring.collection.enabled: true
