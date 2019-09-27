@@ -98,8 +98,10 @@ network.host: {{ ansible_default_ipv4.address }}
 http.port: 9200
 #
 #Set inital master node
-{% if elasticsearch_master_host is defined %}
-cluster.initial_master_nodes: {{ elasticsearch_master_host }}
+{% if elasticsearch_node_host is defined %}
+cluster.initial_master_nodes: ["{{ elasticsearch_master_host }}", "{{ elasticsearch_node_host }}"]
+{% else %}
+cluster.initial_master_nodes: {{ "elasticsearch_master_host" }}
 {% endif %}
 #
 # For more information, consult the network module documentation.
@@ -134,5 +136,3 @@ discovery.zen.ping.unicast.hosts: ["{{ elasticsearch_master_host }}", "{{ elasti
 # Require explicit names when deleting indices:
 #
 #action.destructive_requires_name: true
-xpack.monitoring.enabled: true
-xpack.monitoring.collection.enabled: true
