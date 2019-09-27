@@ -100,6 +100,7 @@ http.port: 9200
 #Set inital master node
 {% if elasticsearch_master_host is defined %}
 cluster.initial_master_nodes: {{ elasticsearch_master_host }}
+{% endif %}
 #
 # For more information, consult the network module documentation.
 #
